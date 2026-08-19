@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="สร้างบัญชีผู้ใช้งาน jane&nan Information System">
+    <title>สมัครสมาชิก | jane&nan</title>
+    <style>
+        :root {
+            --ink: #24221f;
+            --muted: #817a70;
+            --forest: #242522;
+            --leaf: #b99a62;
+            --cream: #e8e1d6;
+            --paper: #fbfaf7;
+            --line: #ded9d0;
+            --danger: #ad5548;
+            --gold: #b99a62;
+            --shadow: 0 24px 70px rgba(45, 41, 33, .12);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--ink);
+            background: linear-gradient(135deg, #eee9e1 0%, #ded4c5 100%);
+            font-family: "Tahoma", "Leelawadee UI", sans-serif;
+        }
+
+        .page {
+            display: grid;
+            grid-template-columns: minmax(330px, .78fr) minmax(500px, 1.22fr);
+            width: min(1200px, calc(100% - 56px));
+            min-height: calc(100vh - 56px);
+            margin: 28px auto;
+            overflow: hidden;
+            border: 1px solid rgba(92, 77, 56, .16);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .intro {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: clamp(34px, 5vw, 64px);
+            color: #f7f3eb;
+            background: #292b27;
+            isolation: isolate;
+        }
+
+        .intro::before,
+        .intro::after {
+            position: absolute;
+            z-index: -1;
+            content: "";
+            border: 1px solid rgba(215, 187, 132, .2);
+            border-radius: 50%;
+        }
+
+        .intro::before { width: 590px; height: 590px; right: -330px; top: 5%; }
+        .intro::after { width: 270px; height: 270px; left: -175px; bottom: -95px; }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #e2c998;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: .03em;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            color: #292a26;
+            background: #d8bd89;
+            border-radius: 50% 50% 50% 8px;
+            font-size: .9rem;
+        }
+
+        .intro-copy { position: relative; max-width: 430px; margin: auto 0; }
+        .intro-copy::before {
+            display: block;
+            width: 38px;
+            height: 1px;
+            margin-bottom: 22px;
+            content: "";
+            background: var(--gold);
+        }
+        .eyebrow {
+            margin: 0 0 18px;
+            color: #c5a86f;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            max-width: 450px;
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(3rem, 5vw, 5.2rem);
+            font-weight: 400;
+            line-height: .98;
+            letter-spacing: -.05em;
+        }
+
+        .intro-copy > p:last-child {
+            max-width: 350px;
+            margin: 25px 0 0;
+            color: #c9c4b9;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .quote {
+            max-width: 290px;
+            margin: 0;
+            color: #ded7ca;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.1rem;
+            line-height: 1.55;
+        }
+
+        .quote cite {
+            display: block;
+            margin-top: 12px;
+            color: #a9a294;
+            font-family: Tahoma, sans-serif;
+            font-size: .72rem;
+            font-style: normal;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .form-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 52px clamp(28px, 7vw, 100px);
+            background: #fbfaf7;
+        }
+
+        .form-wrap { width: min(100%, 540px); }
+        .form-header { margin-bottom: 34px; }
+        .form-header::before { display: block; margin-bottom: 12px; color: var(--gold); content: "01  /  CREATE ACCOUNT"; font-size: .65rem; font-weight: 700; letter-spacing: .18em; }
+        .form-header h2 { margin: 0 0 9px; font-family: Georgia, "Times New Roman", serif; font-size: 2.35rem; font-weight: 400; letter-spacing: -.04em; }
+        .form-header p { margin: 0; color: var(--muted); font-size: .91rem; }
+
+        .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 16px; }
+        .field { display: flex; flex-direction: column; gap: 8px; }
+        .field.full { grid-column: 1 / -1; }
+        label { color: #4a4842; font-size: .75rem; font-weight: 700; letter-spacing: .01em; }
+        .required { color: var(--danger); }
+
+        input {
+            width: 100%;
+            min-height: 51px;
+            padding: 0 15px;
+            color: var(--ink);
+            background: #fffefa;
+            border: 1px solid var(--line);
+            border-radius: 7px;
+            outline: none;
+            font: inherit;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input::placeholder { color: #aab9b1; }
+        input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(185, 154, 98, .14); }
+        .password-box { position: relative; }
+        .password-box input { padding-right: 68px; }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            padding: 5px;
+            color: var(--gold);
+            background: none;
+            border: 0;
+            cursor: pointer;
+            font-size: .75rem;
+            font-weight: 700;
+            transform: translateY(-50%);
+        }
+
+        .strength { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+        .strength-bar { display: flex; flex: 1; gap: 4px; }
+        .strength-bar i { height: 4px; flex: 1; background: #e4eae3; border-radius: 5px; }
+        .strength-text { min-width: 50px; color: var(--muted); font-size: .7rem; text-align: right; }
+        .terms { display: flex; align-items: flex-start; gap: 9px; margin: 24px 0; color: var(--muted); font-size: .78rem; line-height: 1.55; }
+        .terms input { width: 16px; min-height: 16px; margin-top: 2px; accent-color: var(--gold); }
+        .terms a, .signin a { color: #967642; font-weight: 700; text-decoration: none; }
+        .submit {
+            width: 100%;
+            min-height: 52px;
+            color: #fff;
+            background: #292a26;
+            border: 0;
+            border-radius: 7px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: 700;
+            transition: background .2s, transform .2s;
+        }
+        .submit:hover { background: #464840; transform: translateY(-2px); }
+        .signin { margin: 24px 0 0; color: var(--muted); font-size: .8rem; text-align: center; }
+        .error { min-height: 16px; color: var(--danger); font-size: .7rem; }
+        .invalid input { border-color: var(--danger); }
+        .success { display: none; margin-top: 15px; padding: 12px; color: #32654d; background: #e8f2e1; border-radius: 8px; font-size: .82rem; text-align: center; }
+        .success.show { display: block; }
+
+        @media (max-width: 760px) {
+            .page { display: block; width: 100%; min-height: 100vh; margin: 0; border: 0; border-radius: 0; }
+            .intro { min-height: 310px; padding: 28px 24px; }
+            .intro-copy { margin: 45px 0 0; }
+            .intro-copy > p:last-child, .quote { display: none; }
+            h1 { font-size: clamp(2.6rem, 12vw, 4rem); }
+            .form-side { padding: 44px 24px 52px; }
+        }
+
+        @media (max-width: 470px) {
+            .fields { grid-template-columns: 1fr; }
+            .field.full { grid-column: auto; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="intro" aria-label="ข้อมูลระบบ">
+            <div class="brand"><span class="brand-mark">j&n</span> jane&amp;nan</div>
+            <div class="intro-copy">
+                <p class="eyebrow">Information System</p>
+                <h1>เริ่มต้นพื้นที่<br>ของคุณเอง</h1>
+                <p>สร้างบัญชีเพื่อจัดการข้อมูลและทำงานร่วมกันได้อย่างเป็นระบบในที่เดียว</p>
+            </div>
+            <blockquote class="quote">“ทุกความเป็นไปได้ เริ่มต้นจากการลงมือทำครั้งแรก”<cite>jane&amp;nan team</cite></blockquote>
+        </section>
+
+        <section class="form-side">
+            <div class="form-wrap">
+                <header class="form-header">
+                    <h2>สร้างบัญชีใหม่</h2>
+                    <p>กรอกข้อมูลด้านล่างเพื่อเริ่มใช้งานระบบ</p>
+                </header>
+                <form id="registerForm" novalidate>
+                    <div class="fields">
+                        <div class="field">
+                            <label for="firstName">ชื่อ <span class="required">*</span></label>
+                            <input id="firstName" name="firstName" type="text" placeholder="เช่น นานา" autocomplete="given-name" required>
+                            <span class="error"></span>
+                        </div>
+                        <div class="field">
+                            <label for="lastName">นามสกุล <span class="required">*</span></label>
+                            <input id="lastName" name="lastName" type="text" placeholder="เช่น ใจดี" autocomplete="family-name" required>
+                            <span class="error"></span>
+                        </div>
+                        <div class="field full">
+                            <label for="email">อีเมล <span class="required">*</span></label>
+                            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+                            <span class="error"></span>
+                        </div>
+                        <div class="field full">
+                            <label for="password">รหัสผ่าน <span class="required">*</span></label>
+                            <div class="password-box">
+                                <input id="password" name="password" type="password" placeholder="อย่างน้อย 8 ตัวอักษร" autocomplete="new-password" minlength="8" required>
+                                <button class="toggle-password" type="button" data-target="password">แสดง</button>
+                            </div>
+                            <div class="strength" aria-live="polite"><span class="strength-bar"><i></i><i></i><i></i><i></i></span><span class="strength-text">-</span></div>
+                            <span class="error"></span>
+                        </div>
+                        <div class="field full">
+                            <label for="confirmPassword">ยืนยันรหัสผ่าน <span class="required">*</span></label>
+                            <div class="password-box">
+                                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="กรอกรหัสผ่านอีกครั้ง" autocomplete="new-password" required>
+                                <button class="toggle-password" type="button" data-target="confirmPassword">แสดง</button>
+                            </div>
+                            <span class="error"></span>
+                        </div>
+                    </div>
+                    <label class="terms"><input id="terms" type="checkbox" required><span>ฉันยอมรับ <a href="#terms">เงื่อนไขการใช้งาน</a> และ <a href="#privacy">นโยบายความเป็นส่วนตัว</a></span></label>
+                    <button class="submit" type="submit">สร้างบัญชี</button>
+                    <div class="success" role="status">สร้างบัญชีเรียบร้อยแล้ว กำลังเตรียมพื้นที่ของคุณ</div>
+                </form>
+                <p class="signin">มีบัญชีอยู่แล้ว? <a href="index.html">เข้าสู่ระบบ</a></p>
+            </div>
+        </section>
+    </main>
+    <script>
+        const form = document.querySelector('#registerForm');
+        const password = document.querySelector('#password');
+        const confirmPassword = document.querySelector('#confirmPassword');
+        const strengthText = document.querySelector('.strength-text');
+        const strengthSegments = document.querySelectorAll('.strength-bar i');
+
+        document.querySelectorAll('.toggle-password').forEach((button) => {
+            button.addEventListener('click', () => {
+                const input = document.querySelector(`#${button.dataset.target}`);
+                const visible = input.type === 'text';
+                input.type = visible ? 'password' : 'text';
+                button.textContent = visible ? 'แสดง' : 'ซ่อน';
+            });
+        });
+
+        password.addEventListener('input', () => {
+            const value = password.value;
+            let score = 0;
+            if (value.length >= 8) score++;
+            if (/[A-Zก-ฮ]/.test(value) && /[a-zก-ฮ]/.test(value)) score++;
+            if (/\d/.test(value)) score++;
+            if (/[^A-Za-zก-ฮ\d]/.test(value)) score++;
+            const labels = ['-', 'อ่อน', 'พอใช้', 'ดี', 'แข็งแรง'];
+            const colors = ['#e4eae3', '#d87568', '#d6ad62', '#8baa75', '#368263'];
+            strengthText.textContent = labels[score];
+            strengthSegments.forEach((segment, index) => segment.style.background = index < score ? colors[score] : '#e4eae3');
+        });
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            let valid = true;
+            form.querySelectorAll('.field').forEach((field) => {
+                const input = field.querySelector('input');
+                const error = field.querySelector('.error');
+                let message = '';
+                if (!input.value.trim()) message = 'กรุณากรอกข้อมูลนี้';
+                else if (input.type === 'email' && !input.validity.valid) message = 'รูปแบบอีเมลไม่ถูกต้อง';
+                else if (input === password && input.value.length < 8) message = 'รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร';
+                else if (input === confirmPassword && input.value !== password.value) message = 'รหัสผ่านไม่ตรงกัน';
+                field.classList.toggle('invalid', Boolean(message));
+                error.textContent = message;
+                if (message) valid = false;
+            });
+            const terms = document.querySelector('#terms');
+            if (!terms.checked) { valid = false; terms.closest('.terms').style.color = 'var(--danger)'; }
+            else terms.closest('.terms').style.color = '';
+            document.querySelector('.success').classList.toggle('show', valid);
+        });
+    </script>
+</body>
+</html>
