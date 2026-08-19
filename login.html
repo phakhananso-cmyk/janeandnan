@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Jane & Nan</title>
+    <style>
+        :root{
+            --bg:#f3f6fb;
+            --card:#ffffff;
+            --accent:#5b6cff;
+            --muted:#7b8794;
+            --danger:#e74c3c;
+            --radius:12px;
+            --shadow: 0 6px 20px rgba(24,39,75,0.08);
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0;
+            background:linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:32px;
+            color:#111827;
+        }
+        .container{
+            width:100%;
+            max-width:420px;
+        }
+        .card{
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            padding:28px;
+            border:1px solid rgba(16,24,40,0.04);
+        }
+        .brand{
+            display:flex;
+            gap:12px;
+            align-items:center;
+            margin-bottom:18px;
+        }
+        .logo{
+            width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#3ec7ff);
+            display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:18px;
+        }
+        h1{font-size:20px;margin:0}
+        p.lead{margin:6px 0 18px;color:var(--muted);font-size:14px}
+
+        form{display:grid;gap:12px}
+        label{font-size:13px;color:#334155}
+        .input{
+            display:flex;align-items:center;gap:8px;border:1px solid rgba(15,23,42,0.06);padding:10px 12px;border-radius:10px;background:#fff
+        }
+        input[type="text"], input[type="email"], input[type="password"]{
+            border:0;outline:0;font-size:15px;width:100%;background:transparent
+        }
+        .row{display:flex;gap:10px;align-items:center}
+        .checkbox{display:flex;gap:8px;align-items:center}
+        .btn{
+            background:var(--accent);color:#fff;padding:10px 12px;border-radius:10px;border:0;font-weight:600;cursor:pointer;font-size:15px
+        }
+        .btn:disabled{opacity:0.6;cursor:not-allowed}
+        .muted{color:var(--muted);font-size:13px}
+        .error{color:var(--danger);font-size:13px;margin-top:6px}
+
+        .actions{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+
+        .helper{font-size:13px;color:var(--muted);margin-top:12px;text-align:center}
+
+        /* small screens */
+        @media (max-width:420px){
+            .card{padding:20px}
+        }
+    </style>
+</head>
+<body>
+    <main class="container" aria-labelledby="loginTitle">
+        <section class="card" role="region" aria-describedby="loginDesc">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">JN</div>
+                <div>
+                    <h1 id="loginTitle">เข้าสู่ระบบ</h1>
+                    <p id="loginDesc" class="lead">ยินดีต้อนรับกลับ — กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ</p>
+                </div>
+            </div>
+
+            <form id="loginForm" novalidate>
+                <div>
+                    <label for="email">อีเมล หรือ ชื่อผู้ใช้</label>
+                    <div class="input">
+                        <input id="email" name="email" type="text" inputmode="email" autocomplete="username" placeholder="you@example.com" aria-describedby="emailError">
+                    </div>
+                    <div id="emailError" class="error" aria-live="polite"></div>
+                </div>
+
+                <div>
+                    <label for="password">รหัสผ่าน</label>
+                    <div class="input">
+                        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="รหัสผ่านของคุณ" aria-describedby="passError">
+                        <button type="button" id="togglePass" aria-label="แสดงรหัสผ่าน" title="แสดงรหัสผ่าน" style="background:transparent;border:0;cursor:pointer;color:var(--muted)">แสดง</button>
+                    </div>
+                    <div id="passError" class="error" aria-live="polite"></div>
+                </div>
+
+                <div class="actions">
+                    <label class="checkbox"><input id="remember" name="remember" type="checkbox"> <span class="muted">จดจำฉัน</span></label>
+                    <a href="#" class="muted" style="text-decoration:none">ลืมรหัสผ่าน?</a>
+                </div>
+
+                <div style="margin-top:6px;">
+                    <button id="submitBtn" class="btn" type="submit">เข้าสู่ระบบ</button>
+                </div>
+            </form>
+
+            <p class="helper">หรือ <a href="#">สร้างบัญชีใหม่</a></p>
+        </section>
+    </main>
+
+    <script>
+        (function(){
+            const form = document.getElementById('loginForm');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const emailError = document.getElementById('emailError');
+            const passError = document.getElementById('passError');
+            const submitBtn = document.getElementById('submitBtn');
+            const togglePass = document.getElementById('togglePass');
+
+            function validateEmail(v){
+                // simple check: contains @ or is username-like
+                return v && (v.includes('@') ? /\S+@\S+\.\S+/.test(v) : v.length>=3);
+            }
+
+            togglePass.addEventListener('click', ()=>{
+                const shown = password.type === 'text';
+                password.type = shown ? 'password' : 'text';
+                togglePass.textContent = shown ? 'แสดง' : 'ซ่อน';
+                togglePass.setAttribute('aria-label', shown ? 'แสดงรหัสผ่าน' : 'ซ่อนรหัสผ่าน');
+            });
+
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                emailError.textContent = '';
+                passError.textContent = '';
+
+                let ok = true;
+                const em = email.value.trim();
+                const pw = password.value;
+
+                if(!validateEmail(em)){
+                    emailError.textContent = 'กรุณากรอกอีเมลหรือชื่อผู้ใช้ที่ถูกต้อง';
+                    ok = false;
+                }
+                if(!pw || pw.length < 6){
+                    passError.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+                    ok = false;
+                }
+
+                if(!ok) return;
+
+                // simulate async login
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'กำลังเข้าสู่ระบบ...';
+
+                setTimeout(()=>{
+                    // fake success for demo
+                    submitBtn.textContent = 'เข้าสู่ระบบสำเร็จ';
+                    submitBtn.disabled = false;
+                    // redirect simulation
+                    setTimeout(()=>{
+                        window.location.href = 'index.html';
+                    },700);
+                },900);
+            });
+
+            // optional: Enter key triggers submit (handled by form), basic client-side accessibility
+        })();
+    </script>
+</body>
+</html>
